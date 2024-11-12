@@ -497,10 +497,6 @@ void LightFlareData::prepRender(SceneRenderState *state, LightFlareState *flareS
    const Point3F &lightPos = flareState->lightMat.getPosition();   
    const bool isVectorLight = lightInfo->getType() == LightInfo::Vector;
 
-   // Scale based on world space distance from camera to light source.
-   F32 distToCamera = ( camPos - lightPos ).len();
-   F32 lightSourceWSDistanceScale = isVectorLight && distToCamera > 0.0f ? 1.0f : getMin( 10.0f / distToCamera, 10.0f );
-
    // Scale based on screen space distance from screen position of light source to the screen center.
    F32 lightSourceSSDistanceScale = getMax( ( 1.5f - flareLength ) / 1.5f, 0.0f );
 
@@ -517,7 +513,6 @@ void LightFlareData::prepRender(SceneRenderState *state, LightFlareState *flareS
    // This combined scale influences the size of all elements this effect renders.
    // Note we also add in a scale that is user specified in the Light.
    F32 lightSourceIntensityScale = lightSourceBrightnessScale * 
-                                   lightSourceWSDistanceScale * 
                                    lightSourceSSDistanceScale * 
                                    fadeInOutScale * 
                                    flareState->scale *
